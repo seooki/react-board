@@ -3,6 +3,7 @@ const app = express();
 const mysql = require("mysql");
 const PORT = process.env.port || 8000;
 const cors = require("cors");
+const bodyParser = require("body-parser");
 
 const db = mysql.createPool({
   host: "localhost",
@@ -17,6 +18,8 @@ let corsOptions = {
 };
 
 app.use(cors(corsOptions));
+app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get("/list", (req, res) => {
   const sqlQuery =
@@ -31,13 +34,16 @@ app.listen(PORT, () => {
 });
 
 app.post("/insert", (req, res) => {
-  var title = req.body.title;
-  var content = req.body.content;
+  const title = req.body.title;
+  const content = req.body.content;
+
+  console.log(title, content);
 
   const sqlQuery =
-    "INSERT INTO BOARD (BOARD_TITLE, BOARD_CONTENT, REGISTER_ID) FROM (?,?,artistJay);";
+    "INSERT INTO BOARD (BOARD_TITLE, BOARD_CONTENT, REGISTER_ID) VALUES (?, ?,artistJay)";
   db.query(sqlQuery, [title, content], (err, result) => {
     res.send(result);
+    console.log(result);
   });
 });
 
@@ -45,8 +51,7 @@ app.post("/update", (req, res) => {
   var title = req.body.title;
   var content = req.body.content;
 
-  const sqlQuery =
-    "UPDATE BOARD SET BOARD_TITLE = ?, BOARD_CONTENT = ?, UPDATER_ID) FROM (?,?,artistJay);";
+  const sqlQuery = `UPDATE BOARD SET BOARD_TITLE = ?, BOARD_CONTENT = ?, UPDATER_ID) VALUES (?,? ,artistJay);`;
   db.query(sqlQuery, [title, content], (err, result) => {
     res.send(result);
   });
