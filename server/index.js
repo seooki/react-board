@@ -40,7 +40,7 @@ app.post("/insert", (req, res) => {
   console.log(title, content);
 
   const sqlQuery =
-    "INSERT INTO BOARD (BOARD_TITLE, BOARD_CONTENT, REGISTER_ID) VALUES (?, ?,artistJay)";
+  "insert into BOARD(BOARD_TITLE, BOARD_CONTENT, REGISTER_ID) values(?, ?, 'artistJay');";
   db.query(sqlQuery, [title, content], (err, result) => {
     res.send(result);
     console.log(result);
